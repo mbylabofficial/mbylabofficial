@@ -1,0 +1,33 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Mby_lab
+
+//@version=4
+study("How to pirnt out siganl price on candle", overlay=true)
+inputinterval=240
+load = timeframe.isintraday and timeframe.multiplier == inputinterval
+//
+periodK = input(14, title="K", minval=1)
+periodD = input(3, title="D", minval=1)
+smoothK = input(3, title="Smooth", minval=1)
+//
+//plot(load?s: na,color=color.red, linewidth=3, style = plot.style_stepline)
+//
+s1c = security("Bitmex:XBTUSD", "180", close) //
+s1o = security("Bitmex:XBTUSD", "180", open) //
+s1h = security("Bitmex:XBTUSD", "180", high) //
+s1l = security("Bitmex:XBTUSD", "180", low) //
+//
+k = sma(stoch(s1c, s1h, s1l, periodK), smoothK)
+d = sma(k, periodD)
+//
+signal_g = crossover(k,d) and crossover(k,30)
+signal_b = crossunder(k,d) and crossunder(k,70)
+//
+print = signal_g ? s1c : signal_b ? s1c : na
+//
+colorselect = signal_g ? color.lime : signal_b ? color.red : na
+//plotcandle(s1o, s1h, s1l, s1c, title='Title', color = open < close ? color.white : color.black, wickcolor=color.black)
+plot(print, style=plot.style_linebr, color = colorselect, linewidth=3,transp=0)
+//
+plotshape(print, style = shape.labelup, location = location.belowbar, size=size.small, color=colorselect)
+//
