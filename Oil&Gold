@@ -1,0 +1,29 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Mby_lab
+
+//@version=4
+study('USOIL & GOLD')
+//
+hh = open //Tickerid's open price
+ll = low //Tickerid's low price
+mid = hlc3 //Tickerid's (high+low+close)/3 price
+//
+length = input(30) //calculate period
+//
+hl = cum(hh-ll) / mid / length //sigma (hh-ll) eternaty / Tickerid's (high+low+close)/3 / calculate period
+//
+k_o = security("USOIL", "W", close) //loading Crud_oil's Weekly close price (lastest live)
+//
+n_o = security("XAUUSD","W", close)  //loading Gold/usd Weekly close price (lastest live)
+//
+//
+//plot(k_o, color=color.black, title='USOIL')
+//plot(n_o, color=color.red, title='XAUUSD')
+//
+//**core logic calculate**
+oilxau = (n_o - k_o) / n_o 
+//**end**
+plot(oilxau, color=color.green, title='OG') //print out
+//
+//**notice**
+//This sheet did not include back test data / logic
