@@ -1,0 +1,30 @@
+//@version=4
+study(title="moving average return score board", shorttitle="return score")
+len = input(20, title="Length", minval=1)
+percent = input(10.0)
+src = input(close, title="Source")
+exponential = input(false)
+
+basis = exponential ? ema(src, len) : sma(src, len)
+k = percent/100.0
+upper = basis * (1 + k)
+lower = basis * (1 - k)
+//plot(basis, color=color.orange)
+//u = plot(upper, color=color.blue)
+//l = plot(lower, color=color.blue)
+//
+var check = 0.
+check := (close[1] == basis[1]) or (close[1] == upper[1]) or (close[1] == lower[1]) or (close[1] <= upper[1] and close[1] >= lower[1]) ? check[1] + 1 : 0
+plot(check)
+
+score_g = input(80)//score about how strength price return.
+var cal_per_g = 0.
+cal_per_g := check >= score_g ? cal_per_g[1]+1 : 0
+
+score_b = input(20)
+var cal_per_b = 0.
+cal_per_b := check <= score_b ? cal_per_b[1]+1 :0
+
+f_cal_score = score_g / (score_g + score_b) *100
+
+plot(f_cal_score)
