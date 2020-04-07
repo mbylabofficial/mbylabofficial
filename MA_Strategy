@@ -1,0 +1,14 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Mby_lab
+
+//@version=4
+study(title="Moving Average Strategy", shorttitle="MA_Strategy", overlay=true)
+len_9 = input(9, minval=1, title="Length_9")
+len_15 = input(15, minval=1, title="Length_15")
+
+src = input(close, title="Source")
+sma_9 = sma(src, len_9)
+sma_15 = sma(src, len_15)
+
+plot(sma_9, color = color.red)
+plot(sma_15, color = color.green)
