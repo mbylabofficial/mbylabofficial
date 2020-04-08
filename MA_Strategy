@@ -3,12 +3,31 @@
 
 //@version=4
 study(title="Moving Average Strategy", shorttitle="MA_Strategy", overlay=true)
-len_9 = input(9, minval=1, title="Length_9")
-len_15 = input(15, minval=1, title="Length_15")
+len_9 = input(6, minval=1, title="Length_9")
+len_15 = input(60, minval=1, title="Length_15")
+len_60 = input(120, minval=1, title="Length_15")
+len_120 = input(200, minval=1, title="Length_15")
 
-src = input(close, title="Source")
+src = input(open, title="Source")
 sma_9 = sma(src, len_9)
 sma_15 = sma(src, len_15)
+sma_60 = sma(src, len_60)
+sma_120 = sma(src, len_120)
 
-plot(sma_9, color = color.red)
-plot(sma_15, color = color.green)
+signal_g = crossover(sma_9, sma_15)
+signal_b = crossunder(sma_9, sma_15)
+signal_g_l = crossover(sma_60, sma_120)
+signal_b_l = crossunder(sma_60, sma_120)
+
+target_g = signal_g ? open : na
+target_b = signal_b ? open : na
+
+bgcolor(signal_g ? color.green : signal_b ? color.red : na)
+
+plot(sma_9, color = color.red, title = "sma_9")
+plot(sma_15, color = color.green, title = "sma_15")
+
+plot(sma_60, color=color.orange, title = "sma_60")
+plot(sma_120, color=color.purple, title = "sma_120")
+
+bgcolor(sma_60 > sma_120 ? color.blue : sma_60 < sma_120 ? color.orange : na)
